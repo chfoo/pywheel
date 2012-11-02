@@ -80,10 +80,10 @@ class Trier(threading.Thread):
             result = self._fn(*self._fn_args, **self._fn_kwargs)
 
             if result:
-                self._exp_backoff.reset()
+                self._backoff.reset()
                 self._run_event.set()
             else:
-                self._run_event.wait(self._exp_backoff.inc())
+                self._run_event.wait(self._backoff.inc())
 
     def stop(self):
         '''Stop attempt.'''

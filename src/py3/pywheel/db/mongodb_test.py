@@ -3,7 +3,7 @@
 # Licensed under GNU GPLv3. See COPYING.txt for details.
 from pymongo.connection import Connection
 from pywheel.db.mongodb import SessionController, Reconnector
-from pywheel.tornado.session import Session
+from pywheel.web.tornado.session import Session
 import time
 import unittest
 

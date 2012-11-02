@@ -2,7 +2,7 @@
 # Copyright © 2011-2012 Christopher Foo <chris.foo@gmail.com>.
 # Licensed under GNU GPLv3. See COPYING.txt for details.
 import os
-import pywheel.sqlitejsondbm
+import pywheel.db.sqlitejsondbm
 import tempfile
 import unittest
 
@@ -12,7 +12,7 @@ __docformat__ = 'restructuredtext en'
 class TestDB(unittest.TestCase):
     def test_simple(self):
         tempdir = tempfile.TemporaryDirectory()
-        db = pywheel.sqlitejsondbm.Database(os.path.join(tempdir.name,
+        db = pywheel.db.sqlitejsondbm.Database(os.path.join(tempdir.name,
             'kittens.db'))
 
         self.assertEqual(0, len(db.keys()))
