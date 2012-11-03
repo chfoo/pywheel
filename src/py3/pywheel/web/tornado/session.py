@@ -41,7 +41,7 @@ class Session(dict):
 
     @last_modified.setter
     def last_modified(self, timestamp):
-        self[Session.LAST_MODIFIED] = 0
+        self[Session.LAST_MODIFIED] = timestamp
 
     @property
     def cookie_timestamp(self):
