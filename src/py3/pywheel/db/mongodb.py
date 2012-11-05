@@ -11,6 +11,7 @@ from pywheel.web.tornado.session import BaseSessionController
 import datetime
 import logging
 import time
+import bson.code
 
 _logger = logging.getLogger(__name__)
 
@@ -22,9 +23,9 @@ class Reconnector(Trier):
         Arguments are passed to :class:`pymongo.connection.Connection`.
         '''
 
-        Trier.__init__(self, self._try_connect, backoff=ExpBackoff(cap=600))
         self._conn_args = args, kwargs
         self._conn = None
+        Trier.__init__(self, self._try_connect, backoff=ExpBackoff(cap=600))
 
     def _try_connect(self):
         try:
@@ -80,3 +81,27 @@ class SessionController(BaseSessionController):
             time.time() - BaseSessionController.EXPIRE_TIME)
 
         self._collection.remove({self.LAST_MODIFIED: {'$lt': expire_date}})
+
+
+class AggregateTagsCode(object):
+    MAP_TAGS = ("function () {{"
+        "  this.{}.forEach(function(z) {{"
+        "    emit(z, 1);"
+        "  }});"
+        "}}")
+
+    REDUCE_TAGS = ("function (key, values) {"
+        "  var total = 0;"
+        "  for (var i = 0; i < values.length; i++) {"
+        "    total += values[i];"
+        "  }"
+        "  return total;"
+        "}")
+
+    @classmethod
+    def make_map_tags_code(cls, key_name='tags'):
+        return bson.code.Code(AggregateTagsCode.MAP_TAGS.format(key_name))
+
+    @classmethod
+    def make_reduce_tags_code(cls):
+        return bson.code.Code(AggregateTagsCode.REDUCE_TAGS)
