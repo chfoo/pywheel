@@ -9,7 +9,7 @@ are focused on web development.
 import distutils.version
 
 
-short_version = '0.0'  # N.N
+short_version = '0.1'  # N.N
 __version__ = short_version + ''  # N.N[.N]+[{a|b|c|rc}N[.N]+][.postN][.devN]
 short_description, long_description = __doc__.split('\n', 1)
 
